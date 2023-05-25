@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+   
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Learning App</title>
@@ -8,6 +11,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    
+     <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R50KTBLC0G"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-R50KTBLC0G');
+    </script>
+    
+    
 </head>
 <body class="bg-gray-200 flex items-center justify-center h-screen">
     <div class="app bg-white p-10 rounded shadow-md">
@@ -86,6 +101,11 @@
     }
 
     const generateAndSpeakNumber = () => {
+        gtag('event', 'generate_number', {
+          'event_category': 'number_learning',
+          'event_label': 'Number Generated'
+        });
+        
         number = Math.floor(Math.random() * (parseInt(end.value, 10) - parseInt(start.value, 10) + 1) + parseInt(start.value, 10));
         const utterThis = new SpeechSynthesisUtterance(number.toString());
         const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
@@ -108,9 +128,23 @@
             message.textContent = "Correct!";
             generateAndSpeakNumber();
             userInput.value = '';
+            
+            gtag('event', 'correct_answer', {
+              'event_category': 'number_learning',
+              'event_label': 'Correct Answer'
+            });
+
+            
+            
         } else {
             wrongCount++;
             message.textContent = "Try again!";
+            
+            gtag('event', 'wrong_answer', {
+              'event_category': 'number_learning',
+              'event_label': 'Wrong Answer'
+            });
+
         }
         updateScore();
     };
