@@ -11,6 +11,8 @@
 </head>
 <body class="bg-gray-200 flex items-center justify-center h-screen">
     <div class="app bg-white p-10 rounded shadow-md">
+        <p id="score" class="text-lg text-center mb-4"></p>
+
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="language">Choose a language:</label>
             <select id="language" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -46,11 +48,14 @@
             <button id="submitBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2">Submit</button>
         </div>
         <p id="message" class="text-xl text-center"></p>
+        
     </div>
     <script>
-        $(document).ready(function() {
+       $(document).ready(function() {
     $('#voice').select2();
     let number = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
     const synth = window.speechSynthesis;
     let voices = [];
     const voiceSelect = document.getElementById('voice');
@@ -59,6 +64,7 @@
     const end = document.getElementById('end');
     const userInput = document.getElementById('userInput');
     const message = document.getElementById('message');
+    const scoreDisplay = document.getElementById('score');
 
     const populateVoiceList = () => {
         voices = synth.getVoices();
@@ -92,14 +98,21 @@
         synth.speak(utterThis);
     };
 
+    const updateScore = () => {
+        scoreDisplay.textContent = `Correct: ${correctCount}, Wrong: ${wrongCount}`;
+    };
+
     const checkAnswer = () => {
         if (parseInt(userInput.value, 10) === number) {
+            correctCount++;
             message.textContent = "Correct!";
             generateAndSpeakNumber();
             userInput.value = '';
         } else {
+            wrongCount++;
             message.textContent = "Try again!";
         }
+        updateScore();
     };
 
     document.getElementById('generateBtn').addEventListener('click', generateAndSpeakNumber);
@@ -134,6 +147,7 @@
         localStorage.setItem('end', end.value);
     });
 });
+
 
     </script>
 </body>
