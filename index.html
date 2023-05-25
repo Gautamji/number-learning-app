@@ -150,7 +150,17 @@
     };
 
     document.getElementById('generateBtn').addEventListener('click', generateAndSpeakNumber);
-    document.getElementById('repeatBtn').addEventListener('click', () => synth.speak(new SpeechSynthesisUtterance(number.toString())));
+    document.getElementById('repeatBtn').addEventListener('click', () => {
+       const utterThis = new SpeechSynthesisUtterance(number.toString());
+       const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+        voices.forEach((voice) => {
+            if (voice.name === selectedOption) {
+                utterThis.voice = voice;
+            }
+        });
+        utterThis.lang = language.value;
+        synth.speak(utterThis);
+    });
     document.getElementById('submitBtn').addEventListener('click', checkAnswer);
     userInput.addEventListener('keyup', function(e){
         if(e.keyCode === 13){
